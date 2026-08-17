@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Selina · 批注工作台</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --panel: rgba(255,255,255,0.92);
+    --panel-strong: #ffffff;
+    --text: #0f172a;
+    --muted: #64748b;
+    --gold: #c8963e;
+    --gold-soft: #f5e6cc;
+    --line: rgba(148,163,184,0.25);
+    --shadow: 0 20px 50px rgba(15,23,42,0.18);
+    --radius: 18px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(200,150,62,0.18), transparent 28%),
+      radial-gradient(circle at top right, rgba(59,130,246,0.12), transparent 22%),
+      linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+  }
+
+  .shell {
+    height: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(320px, 420px);
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .preview,
+  .workspace {
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255,255,255,0.7);
+    background: var(--panel);
+    backdrop-filter: blur(18px);
+  }
+
+  .panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.92));
+  }
+
+  .brand {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .brand strong {
+    font-size: 1rem;
+    letter-spacing: 0.01em;
+  }
+
+  .brand span,
+  .hint {
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  button,
+  select,
+  textarea,
+  input {
+    font: inherit;
+  }
+
+  .btn {
+    border: 0;
+    border-radius: 999px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+  }
+
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold), #d4a74e);
+    color: white;
+    box-shadow: 0 10px 20px rgba(200,150,62,0.28);
+  }
+  .btn-ghost {
+    background: #fff;
+    color: var(--text);
+    border: 1px solid var(--line);
+  }
+
+  .preview iframe {
+    width: 100%;
+    height: calc(100% - 58px);
+    border: 0;
+    background: #fff;
+  }
+
+  .workspace {
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    min-width: 0;
+  }
+
+  .form {
+    padding: 16px;
+    display: grid;
+    gap: 12px;
+  }
+
+  .field label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #1e293b;
+  }
+
+  .field select,
+  .field textarea {
+    width: 100%;
+    border: 1px solid var(--line);
+    background: var(--panel-strong);
+    border-radius: 14px;
+    padding: 12px 14px;
+    outline: none;
+  }
+
+  .field textarea {
+    min-height: 140px;
+    resize: vertical;
+  }
+
+  .tipbox {
+    margin: 0 16px 16px;
+    border-radius: 14px;
+    background: linear-gradient(180deg, rgba(245,230,204,0.95), rgba(255,255,255,0.95));
+    border: 1px solid rgba(200,150,62,0.25);
+    padding: 12px 14px;
+    color: #7c5b1b;
+    font-size: 0.86rem;
+    line-height: 1.5;
+  }
+
+  .notes {
+    min-height: 0;
+    overflow: auto;
+    padding: 0 16px 16px;
+    display: grid;
+    gap: 10px;
+  }
+
+  .note {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 12px 12px 10px;
+    cursor: pointer;
+    transition: transform 0.16s ease, border-color 0.16s ease;
+  }
+
+  .note:hover { transform: translateY(-1px); border-color: rgba(200,150,62,0.5); }
+  .note strong { display: block; margin-bottom: 4px; }
+  .note small { display: block; margin-top: 8px; color: var(--muted); }
+  .note .tag {
+    display: inline-block;
+    margin-top: 8px;
+    background: var(--gold-soft);
+    color: #8b5e12;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+
+  .empty {
+    color: var(--muted);
+    font-size: 0.88rem;
+    padding: 6px 2px;
+  }
+
+  .footbar {
+    display: flex;
+    gap: 10px;
+    padding: 0 16px 16px;
+  }
+
+  @media (max-width: 960px) {
+    .shell {
+      grid-template-columns: 1fr;
+      grid-template-rows: 55vh minmax(420px, auto);
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="shell">
+    <section class="preview">
+      <div class="panel-head">
+        <div class="brand">
+          <strong>页面预览</strong>
+          <span>打开并查看 <code>index.html</code></span>
+        </div>
+        <div class="actions">
+          <button class="btn btn-ghost" id="open-current">在新标签打开</button>
+        </div>
+      </div>
+      <iframe id="preview-frame" src="./index.html" title="Selina page preview"></iframe>
+    </section>
+
+    <section class="workspace">
+      <div class="panel-head">
+        <div class="brand">
+          <strong>批注工作台</strong>
+          <span>你写批注，我把它们转成后续修改清单</span>
+        </div>
+        <div class="actions">
+          <button class="btn btn-ghost" id="copy-json">复制批注</button>
+          <button class="btn btn-primary" id="save-note">保存批注</button>
+        </div>
+      </div>
+
+      <div class="form">
+        <div class="field">
+          <label for="target">修改位置</label>
+          <select id="target">
+            <option value="about">关于 Selina</option>
+            <option value="intern">实习陪跑</option>
+            <option value="campus">秋招陪跑</option>
+            <option value="social">社招陪跑</option>
+            <option value="compare">同行对比</option>
+            <option value="global">全局风格</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="note">批注内容</label>
+          <textarea id="note" placeholder="例如：把首页 hero 做得更像品牌介绍，少一点促销感；把按钮改成更明确的咨询入口。"></textarea>
+        </div>
+      </div>
+
+      <div class="tipbox">
+        小提示：如果你愿意，可以一次写 1 条聚焦建议，或者直接告诉我“先改哪一块、希望变成什么感觉”。我会按保存的批注顺序逐步落地。
+      </div>
+
+      <div class="footbar">
+        <button class="btn btn-ghost" id="clear-notes" style="flex:1;">清空批注</button>
+      </div>
+
+      <div class="notes" id="notes"></div>
+    </section>
+  </div>
+
+<script>
+  const STORAGE_KEY = 'selina-review-notes-v1';
+  const target = document.getElementById('target');
+  const note = document.getElementById('note');
+  const notesEl = document.getElementById('notes');
+  const saveBtn = document.getElementById('save-note');
+  const clearBtn = document.getElementById('clear-notes');
+  const copyBtn = document.getElementById('copy-json');
+  const openBtn = document.getElementById('open-current');
+
+  const labels = {
+    about: '关于 Selina',
+    intern: '实习陪跑',
+    campus: '秋招陪跑',
+    social: '社招陪跑',
+    compare: '同行对比',
+    global: '全局风格'
+  };
+
+  function loadNotes() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+    catch { return []; }
+  }
+
+  function saveNotes(notes) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+    renderNotes();
+  }
+
+  function renderNotes() {
+    const notes = loadNotes();
+    notesEl.innerHTML = '';
+    if (!notes.length) {
+      notesEl.innerHTML = '<div class="empty">还没有批注。先写一条吧。</div>';
+      return;
+    }
+
+    [...notes].reverse().forEach((item) => {
+      const card = document.createElement('div');
+      card.className = 'note';
+      card.innerHTML = `
+        <strong>${labels[item.target] || item.target}</strong>
+        <div>${escapeHtml(item.text)}</div>
+        <span class="tag">点击可回填</span>
+        <small>${new Date(item.createdAt).toLocaleString('zh-CN')}</small>
+      `;
+      card.addEventListener('click', () => {
+        target.value = item.target;
+        note.value = item.text;
+      });
+      notesEl.appendChild(card);
+    });
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#39;');
+  }
+
+  saveBtn.addEventListener('click', () => {
+    const text = note.value.trim();
+    if (!text) return;
+    const notes = loadNotes();
+    notes.push({ target: target.value, text, createdAt: new Date().toISOString() });
+    saveNotes(notes);
+    note.value = '';
+    note.focus();
+  });
+
+  clearBtn.addEventListener('click', () => {
+    localStorage.removeItem(STORAGE_KEY);
+    renderNotes();
+  });
+
+  copyBtn.addEventListener('click', async () => {
+    const notes = loadNotes();
+    await navigator.clipboard.writeText(JSON.stringify(notes, null, 2));
+    copyBtn.textContent = '已复制';
+    setTimeout(() => { copyBtn.textContent = '复制批注'; }, 1200);
+  });
+
+  openBtn.addEventListener('click', () => {
+    window.open('./index.html', '_blank', 'noopener,noreferrer');
+  });
+
+  renderNotes();
+</script>
+</body>
+</html>

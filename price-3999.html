@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selina · 求职陪跑</title>
+<style>
+  :root {
+    --gold: #c8963e;
+    --gold-light: #f5e6cc;
+    --green: #16a34a;
+    --green-bg: #f0fdf4;
+    --red: #dc2626;
+    --red-bg: #fef2f2;
+    --bg: #ffffff;
+    --bg-secondary: #fafafa;
+    --bg-card: #ffffff;
+    --text: #1a1a2e;
+    --text-secondary: #6b7280;
+    --text-light: #9ca3af;
+    --border: #e5e7eb;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+    --shadow-lg: 0 20px 40px -8px rgba(0,0,0,0.1);
+    --shadow-xl: 0 25px 50px -12px rgba(0,0,0,0.15);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --nav-h: 56px;
+    --bottom-h: 80px;
+    font-size: 16px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    padding-bottom: calc(var(--bottom-h) + 20px);
+  }
+
+  /* ===== Navigation ===== */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    height: var(--nav-h);
+  }
+
+  .nav-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 12px;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .nav-inner::-webkit-scrollbar { display: none; }
+
+  .nav-tab {
+    flex-shrink: 0;
+    padding: 8px 18px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-radius: 24px;
+    transition: all 0.25s;
+    white-space: nowrap;
+    position: relative;
+  }
+
+  .nav-tab:hover { color: var(--text); background: var(--bg-secondary); }
+  .nav-tab.active {
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  /* ===== Page Container ===== */
+  .page {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  .section {
+    display: none;
+    animation: fadeSlide 0.4s ease;
+  }
+  .section.active { display: block; }
+
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== About Section ===== */
+  .about-hero {
+    text-align: center;
+    padding: 48px 24px 36px;
+    background: linear-gradient(180deg, #fefbf5 0%, #ffffff 100%);
+    border-radius: var(--radius);
+    margin-top: 20px;
+    border: 1px solid var(--gold-light);
+  }
+
+  .about-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    letter-spacing: 0.05em;
+  }
+
+  .about-hero h1 {
+    font-size: 2.4rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #1a1a2e 0%, #c8963e 60%, #d4a74e 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .about-hero .title-slogan {
+    font-size: 0.92rem;
+    color: var(--gold);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    margin-bottom: 32px;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .stat-card {
+    background: #fff;
+    border-radius: var(--radius-sm);
+    padding: 20px 12px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .stat-num {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.3;
+  }
+
+  .about-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  .about-feature {
+    text-align: left;
+    padding: 16px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-sm);
+  }
+
+  .about-feature .icon {
+    font-size: 1.4rem;
+    margin-bottom: 6px;
+  }
+
+  .about-feature h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 3px;
+  }
+
+  .about-feature p {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+
+  .about-founder {
+    margin-top: 32px;
+    padding: 24px;
+    background: #fff;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    text-align: left;
+  }
+
+  .about-founder .founder-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+
+  .founder-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), #e8b84f);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .founder-info h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+
+  .founder-info span {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+
+  .founder-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .founder-tag {
+    background: var(--gold-light);
+    color: var(--gold);
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 12px;
+  }
+
+  /* ===== Service Cards ===== */
+  .service-header {
+    text-align: center;
+    padding: 28px 16px 12px;
+  }
+
+  .service-header .tag {
+    display: inline-block;
+    background: var(--gold-light);
+    color: var(--gold);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+
+  .service-header h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text);
+  }
+
+  .service-header .audience {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+
+  .service-card {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 28px 22px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .service-card.featured {
+    border: 2px solid var(--gold);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .scarcity-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: var(--red-bg);
+    color: var(--red);
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 10px 16px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 18px;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.75; }
+  }
+
+  .scarcity-badge .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--red);
+    animation: pulse 2s infinite;
+    animation-delay: 0.5s;
+  }
+
+  .price-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 22px;
+  }
+
+  .price-symbol {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  .price-num {
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .price-emoji {
+    font-size: 1.3rem;
+    margin-left: 4px;
+  }
+
+  .service-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .service-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 0.92rem;
+    color: var(--text);
+    line-height: 1.5;
+    padding: 12px 14px;
+    background: var(--green-bg);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--green);
+  }
+
+  .service-list li .check {
+    color: var(--gold);
+    font-size: 1.05rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-weight: 700;
+  }
+
+  .service-note {
+    margin-top: 18px;
+    padding: 12px 16px;
+    background: var(--red-bg);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--red);
+  }
+
+  .service-note p {
+    font-size: 0.82rem;
+    color: var(--red);
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  /* ===== Comparison Section ===== */
+  .comparison-table-wrap {
+    margin-top: 20px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    font-size: 0.85rem;
+    min-width: 580px;
+  }
+
+  .comparison-table thead th {
+    background: linear-gradient(180deg, #1a1a2e, #2d2d44);
+    color: #fff;
+    padding: 14px 12px;
+    font-weight: 600;
+    font-size: 0.82rem;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .comparison-table thead th:first-child {
+    text-align: left;
+    padding-left: 18px;
+  }
+
+  .comparison-table thead th.highlight-col {
+    background: linear-gradient(180deg, #c8963e, #d4a74e);
+    color: #fff;
+    font-size: 0.88rem;
+  }
+
+  .comparison-table tbody td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+  }
+
+  .comparison-table tbody td:first-child {
+    text-align: left;
+    padding-left: 18px;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  .comparison-table tbody tr:hover {
+    background: #fefbf5;
+  }
+
+  .comparison-table tbody .highlight-row {
+    background: var(--gold-light);
+    font-weight: 700;
+  }
+
+  .comparison-table .check-mark { color: var(--green); font-weight: 700; }
+  .comparison-table .cross-mark { color: #d1d5db; }
+
+  .comparison-table tfoot td {
+    background: #fefbf5;
+    font-weight: 800;
+    color: var(--text);
+    padding: 14px 12px;
+    border-top: 2px solid var(--gold);
+    text-align: center;
+  }
+
+  .comparison-table tfoot td.highlight-col {
+    background: var(--gold-light);
+    color: var(--gold);
+    font-size: 1rem;
+  }
+
+  .table-title {
+    text-align: center;
+    padding: 20px 0 12px;
+  }
+
+  .table-title h2 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .table-title p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  /* ===== Bottom CTA ===== */
+  .bottom-cta {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    padding: 12px 16px;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cta-btn {
+    width: 100%;
+    max-width: 500px;
+    padding: 14px 24px;
+    background: linear-gradient(135deg, var(--gold), #d4a74e);
+    color: #fff;
+    border: none;
+    border-radius: 28px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    box-shadow: 0 8px 24px rgba(200,150,62,0.35);
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .cta-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 32px rgba(200,150,62,0.45);
+  }
+
+  .cta-btn:active {
+    transform: scale(0.98);
+  }
+
+  /* ===== Modal ===== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    animation: fadeIn 0.25s ease;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+  }
+
+  .modal-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .modal {
+    background: #fff;
+    border-radius: 20px 20px 0 0;
+    padding: 32px 24px 40px;
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    animation: slideUp 0.35s ease;
+    box-shadow: 0 -4px 40px rgba(0,0,0,0.15);
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
+  .modal h3 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+
+  .modal .modal-sub {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+  }
+
+  .wechat-card {
+    background: var(--green-bg);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .wechat-icon {
+    font-size: 1.5rem;
+  }
+
+  .wechat-id {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: 0.02em;
+    user-select: all;
+  }
+
+  .copy-btn {
+    background: var(--green);
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .copy-btn:hover { opacity: 0.9; }
+  .copy-btn.copied { background: #15803d; }
+
+  .modal-close {
+    margin-top: 16px;
+    padding: 10px 40px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 24px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 380px) {
+    .stats-grid { grid-template-columns: 1fr; }
+    .nav-tab { padding: 6px 14px; font-size: 0.85rem; }
+    .price-num { font-size: 2.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <button class="nav-tab active" data-tab="about">关于Selina</button>
+    <button class="nav-tab" data-tab="intern">实习陪跑</button>
+    <button class="nav-tab" data-tab="campus">秋招陪跑</button>
+    <button class="nav-tab" data-tab="social">社招陪跑</button>
+    <button class="nav-tab" data-tab="compare">同行对比</button>
+  </div>
+</nav>
+
+<!-- Pages -->
+<div class="page" id="page-container">
+
+  <!-- ======== 关于我们 ======== -->
+  <section class="section active" id="section-about">
+    <div class="about-hero">
+      <h1>Selina · 求职陪跑</h1>
+      <p class="title-slogan">专注求职陪跑 · 1v1 亲自交付</p>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-num">500+</div>
+          <div class="stat-label">学员成功上岸</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">98%</div>
+          <div class="stat-label">目标offer达成率</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">¥3,000-</div>
+          <div class="stat-label">比机构便宜10倍</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-founder">
+      <div class="founder-header">
+        <div class="founder-avatar">S</div>
+        <div class="founder-info">
+          <h3>Selina老师</h3>
+          <span>你的全流程跟进 &amp; 求职策略制定 &amp; Mock导师</span>
+        </div>
+      </div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;font-size:0.88rem;color:var(--text);line-height:1.6;">
+        <li style="display:flex;gap:8px;"><span style="color:var(--gold);font-weight:700;">·</span> 大厂产品PM → 头部出海公司产品GTM</li>
+        <li style="display:flex;gap:8px;"><span style="color:var(--gold);font-weight:700;">·</span> 校招10+大厂offer：TikTok电商商业化、京东采销、百度策略产品、美团商分、小米产品GTM、宝洁CBD等</li>
+        <li style="display:flex;gap:8px;"><span style="color:var(--gold);font-weight:700;">·</span> 精通互联网/科技公司/快消/外企/制造等全行业求职</li>
+        <li style="display:flex;gap:8px;"><span style="color:var(--gold);font-weight:700;">·</span> 500+辅导上岸，3年+求职辅导经验，亲自带学员拿到BAT、头部科技、外企大厂offer，朋友圈学员战绩可查</li>
+      </ul>
+      <div class="founder-tags">
+        <span class="founder-tag">大厂产品PM</span>
+        <span class="founder-tag">头部出海GTM</span>
+        <span class="founder-tag">500+学员上岸</span>
+        <span class="founder-tag">3年+辅导经验</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== 实习陪跑 ======== -->
+  <section class="section" id="section-intern">
+    <div class="service-header">
+      <span class="tag">实习版</span>
+      <h2>实习陪跑</h2>
+      <p class="audience">在校大学生 · 实习求职</p>
+    </div>
+
+    <div class="service-card">
+      <div class="scarcity-badge">
+        <span class="dot"></span> 本月仅剩 <strong id="intern-remain">5</strong> 个名额（共8个）
+      </div>
+
+      <div class="price-row">
+        <span class="price-symbol">¥</span>
+        <span class="price-num">2,999</span>
+        <span class="price-emoji">💰</span>
+      </div>
+
+      <ul class="service-list">
+        <li><span class="check">①</span> 1v1深度定岗 &amp; 职业规划会议</li>
+        <li><span class="check">②</span> 无限次简历精修，Selina本人逐字修改，不限版本</li>
+        <li><span class="check">③</span> 无限次笔面试押题 / 面试1v1指导 / 简历项目梳理，Selina亲自辅导，直到对答如流</li>
+        <li><span class="check">④</span> 深度中大厂垂直实习项目1v1带做，提升实习竞争力</li>
+        <li><span class="check">⑤</span> 微信直通Selina，提供全程无限制的微信咨询支持</li>
+        <li><span class="check">⑥</span> 内推资源和内推信息实时推送</li>
+      </ul>
+
+      <div class="service-note">
+        <p>⚠️ 注：实习陪跑是保offer项目，会一直带到拿offer入职为止</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== 秋招陪跑 ======== -->
+  <section class="section" id="section-campus">
+    <div class="service-header">
+      <span class="tag">校招版</span>
+      <h2>秋招陪跑</h2>
+      <p class="audience">应届毕业生 · 秋招全周期</p>
+    </div>
+
+    <div class="service-card featured">
+      <div class="scarcity-badge">
+        <span class="dot"></span> 本月仅剩 <strong id="campus-remain">3</strong> 个名额（共8个）
+      </div>
+
+      <div class="price-row">
+        <span class="price-symbol">¥</span>
+        <span class="price-num">3,999</span>
+        <span class="price-emoji">💰</span>
+      </div>
+
+      <ul class="service-list">
+        <li><span class="check">①</span> 1v1深度定岗 &amp; 职业规划会议</li>
+        <li><span class="check">②</span> 无限次简历精修，Selina本人逐字修改，不限版本</li>
+        <li><span class="check">③</span> 无限次笔面试押题 / 面试1v1指导 / 简历项目梳理，Selina亲自辅导，直到对答如流</li>
+        <li><span class="check">④</span> 深度中大厂垂直实习项目1v1带做，提升秋招竞争力</li>
+        <li><span class="check">⑤</span> 微信直通Selina，提供全程无限制的微信咨询支持</li>
+        <li><span class="check">⑥</span> 内推资源和秋招信息实时推送</li>
+        <li><span class="check">⑦</span> 深圳线下面访1次</li>
+      </ul>
+
+      <div class="service-note">
+        <p>⚠️ 注：秋招陪跑在12月31日结束，秋招没拿到offer春招会继续带，直到拿到为止</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== 社招陪跑 ======== -->
+  <section class="section" id="section-social">
+    <div class="service-header">
+      <span class="tag">社招版</span>
+      <h2>社招陪跑</h2>
+      <p class="audience">在职跳槽 · 毕业待业 · 转行</p>
+    </div>
+
+    <div class="service-card">
+      <div class="scarcity-badge">
+        <span class="dot"></span> 本月仅剩 <strong id="social-remain">2</strong> 个名额（共5个）
+      </div>
+
+      <div class="price-row">
+        <span class="price-symbol">¥</span>
+        <span class="price-num">4,599</span>
+        <span class="price-emoji">💰</span>
+      </div>
+
+      <ul class="service-list">
+        <li><span class="check">①</span> 1v1深度定岗 &amp; 职业规划会议</li>
+        <li><span class="check">②</span> 无限次简历精修，Selina本人逐字修改，不限版本</li>
+        <li><span class="check">③</span> 无限次笔面试押题 / 面试1v1指导 / 简历项目梳理，Selina亲自辅导，直到对答如流</li>
+        <li><span class="check">④</span> 深度中大厂垂直实习项目1v1带做，提升社招竞争力</li>
+        <li><span class="check">⑤</span> 微信直通Selina，提供全程无限制的微信咨询支持</li>
+        <li><span class="check">⑥</span> 内推资源和社招信息实时推送</li>
+        <li><span class="check">⑦</span> 深圳线下面访1次</li>
+      </ul>
+
+      <div class="service-note">
+        <p>⚠️ 注：社招陪跑服务周期为6个月，没拿到offer会继续带，直到拿到为止</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== 同行对比 ======== -->
+  <section class="section" id="section-compare">
+    <div class="table-title">
+      <h2>行业价格全景对比</h2>
+      <p>同样 1v1 亲自交付，Selina 的价格只有别人的零头</p>
+    </div>
+
+    <div class="comparison-table-wrap">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>服务维度</th>
+            <th>传统求职机构</th>
+            <th>头部求职平台</th>
+            <th>个人求职导师</th>
+            <th class="highlight-col">⭐ Selina</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>价格范围</td>
+            <td>¥20,000-50,000</td>
+            <td>¥8,000-15,000</td>
+            <td>¥5,000-12,000</td>
+            <td class="highlight-col"><strong>¥2,999-4,599</strong></td>
+          </tr>
+          <tr>
+            <td>交付方式</td>
+            <td>助教/班主任代交付</td>
+            <td>分配导师（随机）</td>
+            <td>导师本人</td>
+            <td class="highlight-col">Selina 本人亲自交付</td>
+          </tr>
+          <tr>
+            <td>简历修改次数</td>
+            <td>1-2次</td>
+            <td>3-5次</td>
+            <td>5-10次</td>
+            <td class="highlight-col"><span class="check-mark">无限次</span></td>
+          </tr>
+          <tr>
+            <td>面试辅导</td>
+            <td>2-3次</td>
+            <td>3-5次</td>
+            <td>5-8次</td>
+            <td class="highlight-col"><span class="check-mark">无限次</span></td>
+          </tr>
+          <tr>
+            <td>实战项目带做</td>
+            <td><span class="cross-mark">✗</span></td>
+            <td><span class="cross-mark">✗</span></td>
+            <td>部分含项目</td>
+            <td class="highlight-col"><span class="check-mark">中大厂垂直项目</span></td>
+          </tr>
+          <tr>
+            <td>线下面访</td>
+            <td><span class="cross-mark">✗</span></td>
+            <td><span class="cross-mark">✗</span></td>
+            <td><span class="cross-mark">✗</span></td>
+            <td class="highlight-col"><span class="check-mark">含1次深圳面访</span></td>
+          </tr>
+          <tr>
+            <td>微信直连</td>
+            <td><span class="cross-mark">✗</span></td>
+            <td>群聊/工单</td>
+            <td><span class="check-mark">✓</span></td>
+            <td class="highlight-col"><span class="check-mark">无限制直连</span></td>
+          </tr>
+          <tr>
+            <td>保offer承诺</td>
+            <td>退款条件苛刻</td>
+            <td>部分退款</td>
+            <td>口头承诺</td>
+            <td class="highlight-col"><span class="check-mark">不拿offer不停带</span></td>
+          </tr>
+          <tr>
+            <td>服务周期</td>
+            <td>3-6个月</td>
+            <td>3-6个月</td>
+            <td>3个月</td>
+            <td class="highlight-col"><span class="check-mark">直到拿offer为止</span></td>
+          </tr>
+          <tr>
+            <td>学员/导师比</td>
+            <td>50:1 - 100:1</td>
+            <td>30:1 - 50:1</td>
+            <td>10:1 - 30:1</td>
+            <td class="highlight-col"><strong>每月限额8人</strong></td>
+          </tr>
+          <tr>
+            <td>总结</td>
+            <td style="color:#dc2626;">花钱买助教</td>
+            <td style="color:#ea580c;">随机分配导师</td>
+            <td style="color:#ca8a04;">参差不齐</td>
+            <td class="highlight-col" style="color:#c8963e;font-weight:800;font-size:0.88rem;">极致性价比 · 亲自交付</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="text-align:center;padding:20px 16px 10px;color:var(--text-secondary);font-size:0.82rem;">
+      💡 同样的 1v1 服务，传统机构收费是 Selina 的 <strong style="color:var(--red);">5-10倍</strong>，且多为助教代交付
+    </div>
+  </section>
+</div>
+
+<!-- Bottom CTA -->
+<div class="bottom-cta" id="bottom-cta">
+  <button class="cta-btn" onclick="openModal()">
+    💬 立即咨询 / 抢占名额
+  </button>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h3>📱 添加 Selina 微信</h3>
+    <p class="modal-sub">1v1 免费咨询，名额有限先到先得</p>
+    <div class="wechat-card">
+      <span class="wechat-icon">💚</span>
+      <span class="wechat-id" id="wechat-id">selinafudao</span>
+    </div>
+    <button class="copy-btn" id="copy-btn" onclick="copyWechat()">📋 复制微信号</button>
+    <br>
+    <button class="modal-close" onclick="closeModal()">关闭</button>
+  </div>
+</div>
+
+<script>
+// Tab switching
+const nav = document.getElementById('nav');
+const tabs = nav.querySelectorAll('.nav-tab');
+const sections = document.querySelectorAll('.section');
+
+function switchTab(tabName) {
+  tabs.forEach(t => t.classList.remove('active'));
+  sections.forEach(s => s.classList.remove('active'));
+
+  const tab = nav.querySelector(`[data-tab="${tabName}"]`);
+  const section = document.getElementById(`section-${tabName}`);
+
+  if (tab) tab.classList.add('active');
+  if (section) section.classList.add('active');
+
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    const tabName = tab.dataset.tab;
+    switchTab(tabName);
+    // Update URL hash
+    history.replaceState(null, '', `#${tabName}`);
+  });
+});
+
+// Touch swipe support
+let touchStartX = 0;
+let touchEndX = 0;
+const tabNames = ['about', 'intern', 'campus', 'social', 'compare'];
+
+document.addEventListener('touchstart', e => {
+  touchStartX = e.changedTouches[0].screenX;
+}, { passive: true });
+
+document.addEventListener('touchend', e => {
+  touchEndX = e.changedTouches[0].screenX;
+  const diff = touchEndX - touchStartX;
+  if (Math.abs(diff) < 50) return; // min swipe distance
+
+  const currentTab = document.querySelector('.nav-tab.active');
+  if (!currentTab) return;
+
+  const currentIndex = tabNames.indexOf(currentTab.dataset.tab);
+  if (currentIndex === -1) return;
+
+  let newIndex;
+  if (diff < 0) {
+    // Swipe left → next
+    newIndex = Math.min(currentIndex + 1, tabNames.length - 1);
+  } else {
+    // Swipe right → prev
+    newIndex = Math.max(currentIndex - 1, 0);
+  }
+
+  if (newIndex !== currentIndex) {
+    switchTab(tabNames[newIndex]);
+  }
+}, { passive: true });
+
+// Modal
+function openModal() {
+  document.getElementById('modal-overlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modal-overlay')) return;
+  document.getElementById('modal-overlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function copyWechat() {
+  const wechatId = document.getElementById('wechat-id').textContent;
+  navigator.clipboard.writeText(wechatId).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = '✅ 已复制';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = '📋 复制微信号';
+      btn.classList.remove('copied');
+    }, 2000);
+  }).catch(() => {
+    // Fallback
+    const range = document.createRange();
+    range.selectNode(document.getElementById('wechat-id'));
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = '✅ 请手动复制';
+    setTimeout(() => { btn.textContent = '📋 复制微信号'; }, 2000);
+  });
+}
+
+// URL hash support
+function handleHash() {
+  const hash = window.location.hash.slice(1);
+  if (hash && tabNames.includes(hash)) {
+    switchTab(hash);
+  }
+}
+
+window.addEventListener('hashchange', handleHash);
+handleHash();
+
+// Dynamic scarcity countdown
+const slots = {
+  intern: { total: 8, remain: 5 },
+  campus: { total: 8, remain: 3 },
+  social: { total: 5, remain: 2 }
+};
+
+function updateSlots() {
+  for (const [key, data] of Object.entries(slots)) {
+    const el = document.getElementById(`${key}-remain`);
+    if (el) el.textContent = data.remain;
+  }
+}
+
+updateSlots();
+</script>
+
+</body>
+</html>

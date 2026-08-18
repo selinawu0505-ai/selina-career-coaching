@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071713">
+  <title>Selina 秋招陪跑 · 专属知识库</title>
+  <style>
+    :root {
+      --ink: #071713;
+      --ink-2: #0c251f;
+      --paper: #f3f0e7;
+      --paper-2: #e9e3d5;
+      --mint: #89f0c7;
+      --lime: #d8ff78;
+      --gold: #e9bd6a;
+      --muted: #9ab0a9;
+      --line: rgba(220, 255, 239, .14);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: #f5f3eb;
+      background:
+        radial-gradient(circle at 15% 0%, rgba(89, 220, 171, .17), transparent 32rem),
+        radial-gradient(circle at 92% 28%, rgba(233, 189, 106, .12), transparent 28rem),
+        var(--ink);
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .06;
+      background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, #000, transparent 75%);
+    }
+
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+
+    .shell { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+
+    .nav {
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; letter-spacing: .04em; }
+    .brand-mark {
+      width: 36px; height: 36px; display: grid; place-items: center;
+      color: var(--ink); background: var(--mint); border-radius: 10px 10px 10px 2px;
+      font-family: Georgia, serif; font-size: 20px;
+      box-shadow: 0 0 30px rgba(137, 240, 199, .24);
+    }
+    .brand small { display: block; color: var(--muted); font-size: 10px; font-weight: 500; margin-top: 2px; }
+    .member-pill { padding: 9px 14px; border: 1px solid rgba(216,255,120,.28); color: var(--lime); border-radius: 999px; font-size: 12px; background: rgba(216,255,120,.06); }
+
+    .hero {
+      min-height: 610px;
+      display: grid;
+      grid-template-columns: 1.12fr .88fr;
+      align-items: center;
+      gap: 72px;
+      padding: 72px 0 80px;
+    }
+
+    .eyebrow { display: flex; align-items: center; gap: 10px; color: var(--mint); font-size: 13px; font-weight: 700; letter-spacing: .16em; }
+    .eyebrow::before { content: ""; width: 34px; height: 1px; background: var(--mint); }
+
+    h1 {
+      max-width: 700px;
+      margin: 22px 0 22px;
+      font-family: "STKaiti", "KaiTi", serif;
+      font-size: clamp(48px, 7vw, 88px);
+      font-weight: 700;
+      letter-spacing: -.05em;
+      line-height: 1.02;
+    }
+    h1 em { color: var(--lime); font-style: normal; position: relative; white-space: nowrap; }
+    h1 em::after { content: ""; position: absolute; left: 4px; right: 0; bottom: -5px; height: 7px; border-top: 2px solid var(--gold); border-radius: 50%; transform: rotate(-2deg); }
+    .lead { max-width: 590px; color: #b7c7c1; font-size: 17px; line-height: 1.9; }
+    .lead strong { color: #fff; }
+
+    .hero-actions { margin-top: 32px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+    .primary-btn { border: 0; padding: 15px 22px; border-radius: 14px; color: var(--ink); background: var(--mint); font-weight: 800; box-shadow: 0 12px 36px rgba(80, 230, 173, .18); transition: transform .25s, box-shadow .25s; }
+    .primary-btn:hover { transform: translateY(-3px); box-shadow: 0 18px 44px rgba(80, 230, 173, .28); }
+    .subnote { color: var(--muted); font-size: 12px; }
+
+    .knowledge-orbit { position: relative; min-height: 430px; display: grid; place-items: center; }
+    .orbit-ring { position: absolute; width: 390px; height: 390px; border: 1px dashed rgba(137,240,199,.23); border-radius: 50%; animation: spin 35s linear infinite; }
+    .orbit-ring::before, .orbit-ring::after { content: ""; position: absolute; width: 9px; height: 9px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 18px var(--mint); }
+    .orbit-ring::before { top: 43px; right: 57px; }
+    .orbit-ring::after { bottom: 36px; left: 74px; background: var(--gold); box-shadow: 0 0 18px var(--gold); }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .ai-card {
+      position: relative; z-index: 2; width: min(340px, 90%); padding: 24px;
+      border: 1px solid rgba(255,255,255,.16); border-radius: 26px;
+      background: linear-gradient(150deg, rgba(255,255,255,.11), rgba(255,255,255,.035));
+      backdrop-filter: blur(18px); box-shadow: 0 30px 80px rgba(0,0,0,.34);
+      transform: rotate(2deg);
+    }
+    .ai-head { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 11px; }
+    .live { color: var(--lime); }
+    .live::before { content: ""; display: inline-block; width: 6px; height: 6px; background: var(--lime); border-radius: 50%; margin-right: 6px; box-shadow: 0 0 10px var(--lime); }
+    .wave { height: 78px; display: flex; align-items: center; gap: 5px; margin: 18px 0; }
+    .wave i { width: 4px; height: calc(var(--h) * 1%); border-radius: 5px; background: linear-gradient(var(--lime), var(--mint)); animation: wave 1.5s ease-in-out infinite alternate; animation-delay: calc(var(--i) * -.08s); }
+    @keyframes wave { to { transform: scaleY(.42); opacity: .55; } }
+    .ai-card h3 { font-family: "STKaiti", "KaiTi", serif; font-size: 24px; margin: 0 0 10px; }
+    .ai-card p { margin: 0; color: #b8c8c2; font-size: 13px; line-height: 1.7; }
+    .ai-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 18px; }
+    .ai-tags span { padding: 6px 9px; border-radius: 8px; background: rgba(137,240,199,.1); color: var(--mint); font-size: 10px; }
+
+    .content-panel { background: var(--paper); color: var(--ink); border-radius: 34px 34px 0 0; padding: 58px 0 90px; }
+    .panel-top { display: flex; justify-content: space-between; align-items: end; gap: 28px; margin-bottom: 30px; }
+    .kicker { color: #628279; text-transform: uppercase; letter-spacing: .13em; font-size: 11px; font-weight: 800; }
+    h2 { margin: 8px 0 0; font-family: "STKaiti", "KaiTi", serif; font-size: clamp(32px, 5vw, 48px); line-height: 1.1; }
+    .search { width: min(370px, 100%); height: 52px; display: flex; align-items: center; gap: 10px; padding: 0 17px; border: 1px solid #d4cdbf; border-radius: 16px; background: rgba(255,255,255,.66); }
+    .search input { width: 100%; border: 0; outline: 0; background: transparent; color: var(--ink); }
+    .search span { color: #7e8e88; }
+
+    .filters { display: flex; gap: 8px; overflow-x: auto; padding: 2px 0 20px; scrollbar-width: none; }
+    .filters::-webkit-scrollbar { display: none; }
+    .filter { flex: 0 0 auto; border: 1px solid #d7d0c4; background: transparent; color: #53665f; border-radius: 999px; padding: 9px 15px; transition: .2s; }
+    .filter:hover, .filter.active { background: var(--ink); border-color: var(--ink); color: var(--lime); }
+
+    .cards { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 16px; }
+    .case-card { min-height: 260px; padding: 24px; border: 1px solid #d9d1c4; border-radius: 22px; background: rgba(255,255,255,.52); display: flex; flex-direction: column; transition: transform .25s, box-shadow .25s, opacity .25s; }
+    .case-card:hover { transform: translateY(-5px); box-shadow: 0 18px 40px rgba(31,55,47,.1); }
+    .case-card.featured { background: var(--ink-2); color: #fff; border-color: var(--ink-2); }
+    .case-meta { display: flex; justify-content: space-between; color: #768981; font-size: 11px; }
+    .featured .case-meta { color: var(--muted); }
+    .case-icon { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 11px; background: #e3ded2; font-size: 18px; margin: 30px 0 18px; }
+    .featured .case-icon { background: rgba(137,240,199,.13); }
+    .case-card h3 { font-family: "STKaiti", "KaiTi", serif; font-size: 22px; line-height: 1.35; margin: 0 0 12px; }
+    .case-card p { color: #6e7f79; font-size: 12px; line-height: 1.7; margin: 0 0 24px; }
+    .featured p { color: #aebfb9; }
+    .case-foot { margin-top: auto; padding-top: 14px; border-top: 1px solid rgba(83,102,95,.15); display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #778880; }
+    .featured .case-foot { border-color: var(--line); color: var(--mint); }
+    .empty { grid-column: 1 / -1; text-align: center; padding: 55px; color: #708079; }
+
+    .promise { margin-top: 52px; display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid #d9d1c4; border-radius: 22px; overflow: hidden; }
+    .promise-item { padding: 23px; border-right: 1px solid #d9d1c4; }
+    .promise-item:last-child { border-right: 0; }
+    .promise-num { color: #19755b; font-family: Georgia, serif; font-size: 26px; font-style: italic; }
+    .promise-item h4 { margin: 8px 0 5px; }
+    .promise-item p { margin: 0; color: #788780; font-size: 11px; line-height: 1.6; }
+
+    .toast { position: fixed; left: 50%; bottom: 24px; z-index: 20; transform: translate(-50%, 20px); padding: 12px 18px; border-radius: 999px; color: var(--ink); background: var(--mint); font-weight: 700; font-size: 12px; opacity: 0; pointer-events: none; transition: .3s; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    @media (max-width: 850px) {
+      .shell { width: min(100% - 28px, 680px); }
+      .hero { grid-template-columns: 1fr; gap: 30px; padding: 54px 0 64px; }
+      .knowledge-orbit { min-height: 390px; }
+      .orbit-ring { width: 340px; height: 340px; }
+      .cards { grid-template-columns: 1fr 1fr; }
+      .case-card.featured { grid-column: 1 / -1; }
+      .promise { grid-template-columns: 1fr 1fr; }
+      .promise-item:nth-child(2) { border-right: 0; }
+      .promise-item:nth-child(-n+2) { border-bottom: 1px solid #d9d1c4; }
+    }
+
+    @media (max-width: 560px) {
+      .nav { height: 66px; }
+      .member-pill { font-size: 10px; padding: 7px 10px; }
+      h1 { font-size: 48px; }
+      .lead { font-size: 15px; }
+      .hero { padding-top: 44px; }
+      .knowledge-orbit { min-height: 340px; }
+      .orbit-ring { width: 300px; height: 300px; }
+      .ai-card { width: 285px; padding: 20px; }
+      .panel-top { display: block; }
+      .search { margin-top: 22px; }
+      .cards { grid-template-columns: 1fr; }
+      .case-card.featured { grid-column: auto; }
+      .case-card { min-height: 235px; }
+      .content-panel { border-radius: 26px 26px 0 0; padding-top: 42px; }
+      .promise { grid-template-columns: 1fr; }
+      .promise-item { border-right: 0; border-bottom: 1px solid #d9d1c4; }
+      .promise-item:last-child { border-bottom: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="shell nav">
+    <div class="brand">
+      <div class="brand-mark">S</div>
+      <div>SELINA LAB<small>CAREER INTELLIGENCE ARCHIVE</small></div>
+    </div>
+    <div class="member-pill">秋招陪跑专属 · PRIVATE</div>
+  </header>
+
+  <main>
+    <section class="shell hero">
+      <div>
+        <div class="eyebrow">即将上线 · 秋招情报站</div>
+        <h1>把每一次 Mock，<br>变成你的<em>第二大脑</em></h1>
+        <p class="lead">面试拆解、答题框架、逻辑误区与项目复盘，经由 AI 结构化沉淀。<strong>不靠临时抱佛脚，持续建立属于你的面试逻辑。</strong></p>
+        <div class="hero-actions">
+          <button class="primary-btn" onclick="document.getElementById('archive').scrollIntoView()">抢先浏览知识库 ↓</button>
+          <span class="subnote">仅收录 Selina 讲解 · 学员信息全程脱敏</span>
+        </div>
+      </div>
+
+      <div class="knowledge-orbit" aria-label="AI 正在整理会议内容">
+        <div class="orbit-ring"></div>
+        <article class="ai-card">
+          <div class="ai-head"><span>FEISHU MEETING · 48:21</span><span class="live">AI 整理中</span></div>
+          <div class="wave" aria-hidden="true">
+            <i style="--h:35;--i:1"></i><i style="--h:62;--i:2"></i><i style="--h:88;--i:3"></i><i style="--h:45;--i:4"></i><i style="--h:72;--i:5"></i><i style="--h:100;--i:6"></i><i style="--h:58;--i:7"></i><i style="--h:80;--i:8"></i><i style="--h:42;--i:9"></i><i style="--h:68;--i:10"></i><i style="--h:92;--i:11"></i><i style="--h:48;--i:12"></i><i style="--h:76;--i:13"></i><i style="--h:54;--i:14"></i><i style="--h:84;--i:15"></i><i style="--h:38;--i:16"></i><i style="--h:65;--i:17"></i><i style="--h:93;--i:18"></i>
+          </div>
+          <h3>商业化产品 Mock #07</h3>
+          <p>正在提炼：业务目标 → 核心指标 → 策略拆解 → 风险判断 → 追问应对</p>
+          <div class="ai-tags"><span>答题框架</span><span>高频追问</span><span>逻辑误区</span><span>STAR 优化</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="content-panel" id="archive">
+      <div class="shell">
+        <div class="panel-top">
+          <div><div class="kicker">Knowledge Archive / 001</div><h2>从别人的面试里，<br>预演自己的下一场。</h2></div>
+          <label class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="搜索岗位、公司或面试问题…"></label>
+        </div>
+
+        <div class="filters" id="filters">
+          <button class="filter active" data-filter="全部">全部内容</button>
+          <button class="filter" data-filter="商业化">商业化</button>
+          <button class="filter" data-filter="电商">电商</button>
+          <button class="filter" data-filter="广告">广告</button>
+          <button class="filter" data-filter="产品">产品</button>
+          <button class="filter" data-filter="商分">商业分析</button>
+          <button class="filter" data-filter="策略运营">策略运营</button>
+        </div>
+
+        <div class="cards" id="cards">
+          <article class="case-card featured" data-tags="商业化 产品 字节跳动 指标拆解">
+            <div class="case-meta"><span>精选复盘 · 12 MIN READ</span><span>2026.08</span></div>
+            <div class="case-icon">◫</div>
+            <h3>“如果让你提升广告收入，你会从哪里开始？”</h3>
+            <p>从业务北极星指标出发，拆解流量、转化与客户预算，避免一上来就堆策略。</p>
+            <div class="case-foot"><span>商业化产品 · 字节系</span><span>打开复盘 →</span></div>
+          </article>
+
+          <article class="case-card" data-tags="电商 策略运营 美团 用户增长">
+            <div class="case-meta"><span>MOCK 拆解</span><span>09:42</span></div>
+            <div class="case-icon">↗</div>
+            <h3>如何判断一场促销活动是否真的有效？</h3>
+            <p>区分自然增长与活动增量，搭建评价指标，并处理短期 GMV 与长期留存的冲突。</p>
+            <div class="case-foot"><span>电商策略</span><span>5 个追问</span></div>
+          </article>
+
+          <article class="case-card" data-tags="产品 商分 腾讯 项目经历 简历">
+            <div class="case-meta"><span>项目梳理</span><span>14:18</span></div>
+            <div class="case-icon">⌘</div>
+            <h3>项目经历讲不深？先补齐这四层逻辑</h3>
+            <p>背景不是铺垫，而是证明判断力。用目标、约束、取舍和结果重建项目叙事。</p>
+            <div class="case-foot"><span>产品经理</span><span>框架模板</span></div>
+          </article>
+        </div>
+
+        <div class="promise">
+          <div class="promise-item"><div class="promise-num">01</div><h4>会议自动沉淀</h4><p>飞书会议结束后，AI 自动整理 Selina 的讲解内容。</p></div>
+          <div class="promise-item"><div class="promise-num">02</div><h4>岗位精细归档</h4><p>按商业化、电商、广告、产品、商分等方向持续更新。</p></div>
+          <div class="promise-item"><div class="promise-num">03</div><h4>学员隐私脱敏</h4><p>仅保留导师讲解，不收录任何同学的个人信息与声音。</p></div>
+          <div class="promise-item"><div class="promise-num">∞</div><h4>陪跑专属权益</h4><p>只向秋招陪跑学员开放，不单独售卖，不对外流通。</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">Demo 内容即将随知识库正式上线</div>
+
+  <script>
+    const filterButtons = [...document.querySelectorAll('.filter')];
+    const cards = [...document.querySelectorAll('.case-card')];
+    const searchInput = document.getElementById('searchInput');
+    let activeFilter = '全部';
+
+    function renderCards() {
+      const keyword = searchInput.value.trim().toLowerCase();
+      let visible = 0;
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase() + ' ' + card.dataset.tags.toLowerCase();
+        const matchesFilter = activeFilter === '全部' || text.includes(activeFilter.toLowerCase());
+        const matchesKeyword = !keyword || text.includes(keyword);
+        card.hidden = !(matchesFilter && matchesKeyword);
+        if (!card.hidden) visible++;
+      });
+
+      let empty = document.querySelector('.empty');
+      if (!visible && !empty) {
+        empty = document.createElement('div');
+        empty.className = 'empty';
+        empty.textContent = '这个方向的知识正在整理中，正式上线后持续更新。';
+        document.getElementById('cards').appendChild(empty);
+      } else if (visible && empty) {
+        empty.remove();
+      }
+    }
+
+    filterButtons.forEach(button => button.addEventListener('click', () => {
+      filterButtons.forEach(item => item.classList.remove('active'));
+      button.classList.add('active');
+      activeFilter = button.dataset.filter;
+      renderCards();
+    }));
+    searchInput.addEventListener('input', renderCards);
+
+    cards.forEach(card => card.addEventListener('click', () => {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+    }));
+  </script>
+</body>
+</html>
+
